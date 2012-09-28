@@ -1,0 +1,28 @@
+@charset "utf-8";
+/* CSS Document */
+.menubar a:link {color:#FFF;}      /* unvisited link */
+.menubar a:visited {color:#FFF;}  /* visited link */
+.menubar a:hover {color:#FFF;}  /* mouse over link */
+.menubar a:active {color:#FFF;}  /* selected link */
+.logo {
+	background-image:url('../images/logo.jpg');
+	background-repeat:no-repeat;
+	width:354px;
+	height:78px;
+	margin-left:50px;
+}
+.bar {
+	background-image:url('../images/head_line.jpg');
+	height:2px;
+}
+.content {
+	width:1000px;
+	height:800px;
+	padding-top:20px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.footer {
+	margin-left:auto;
+	margin-right:auto;
+}

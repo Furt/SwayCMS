@@ -1,0 +1,30 @@
+<?php 
+// Site Options
+$site = array (
+  'name' => 'SiteName',
+  'template' => 'sway',
+  'news' => 'default',
+  'news_post' => '5',
+  'plugin' => 'default',
+  'language' => 'english',
+  'forum' => '/forum/',
+  'mysql' => 'mysql',
+);
+
+// Website database
+$website = array (
+  'host' => 'localhost',
+  'user' => 'root',
+  'pass' => 'pass',
+  'database' => 'swaycms',
+);
+
+// Account database
+$account = array (
+  'host' => 'localhost',
+  'user' => 'root',
+  'pass' => 'pass',
+  'database' => 'swaycms',
+);
+
+?>

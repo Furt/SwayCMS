@@ -1,0 +1,14 @@
+houses
+highscores
+last killed
+donations
+who is online
+forum
+staff list
+guilds
+guild wars
+banishments
+server statistics (xp rates, skill rates, dedicated info, etc.)
+top level
+highest kills (pvp)
+top donor/donations needed for next months payment.

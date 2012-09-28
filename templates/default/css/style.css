@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+
+.status {
+	width:100px;
+	height:20px;
+	color:#fff;
+	background-color:#000;
+}
+.ads {
+	margin-top:5px;
+	margin-bottom:5px;
+}
+
+.footer {
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}

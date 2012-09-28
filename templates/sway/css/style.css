@@ -1,0 +1,127 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+	text-align:center;
+	margin:0 auto;
+	font-size:12px;
+	font-style:normal;
+	color:#E4E4E4;
+	background-color:#fff;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+}
+
+.topbar_l {
+	background-image:url('../images/top_bar_left.jpg');
+	position:top;
+	top:0px;
+	width:33px;
+	height:33px;
+}
+.topbar_m {
+	background-image:url('../images/top_bar_m.jpg');
+	background-repeat:repeat-x;
+	position:top;
+	top:0px;
+	height:33px;
+	padding:0px;
+	margin:0,0,0,0;
+}
+.topbar_r {
+	background-image:url('../images/top_bar_right.jpg');
+	position:top;
+	top:0px;
+	width:32px;
+	height:33px;
+}
+.banner {
+	background-image:url('../images/banner_b.jpg');
+	background-repeat:repeat-x;
+	height:106px;
+}
+.logo {
+	background-image:url('../images/logo.jpg');
+	background-repeat:no-repeat;
+	width:276px;
+	height:106px;
+	margin-left:100px;
+}
+.status {
+	width:100px;
+	height:20px;
+	color:#fff;
+	background-color:#000;
+}
+.modules {
+	background-image:url('../images/side.jpg');
+}
+.menu {
+	background-image:url('../images/menu/module_t.png');
+	width:159px;
+	height:43px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.text {
+	padding-bottom:0px;
+	padding-left:0px;
+	padding-top:8px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.holder {
+	width:159px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.menu_content {
+	background-image:url('../images/menu/module_m.png');
+	background-repeat:repeat-y;
+	width:159px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.content {
+	margin-left:auto;
+	margin-right:auto;
+}
+.menubb {
+	background-image:url('../images/menu/module_b.png');
+	background-repeat:repeat-y;
+	width:159px;
+	height:24px;
+	margin-left:auto;
+	margin-right:auto;
+}
+.ads {
+	margin-top:5px;
+	margin-bottom:5px;
+}
+#links ul {
+list-style:square url(../images/index.jpg);
+}
+#links li {
+	font-size: 10px;
+	margin: 0 0 0 0;
+	height:11px;
+}
+#links li a {
+	font-size: 10px;
+	font-family: Verdana;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	text-decoration:none;
+}
+#links li a:hover {
+	color:#ffffff;
+	font-weight:bold;
+	font-family: Verdana;
+}
+.center {
+	background-image:url('../images/center.jpg');
+}
+.footer {
+	background-image:url('../images/footer_b.jpg');
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+}
