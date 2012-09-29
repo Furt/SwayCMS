@@ -55,7 +55,7 @@ CREATE TABLE `news` (
 
 /*Data for the table `news` */
 
-insert  into `news`(`id`,`postdate`,`author`,`title`,`news`) values (1,'01/31/2010','Darko','SwayCMS','SwayCMS is a php content management system designed use with emulators such as : TrinityCore, MaNGOS, ArcEMU, OTserv, and AionUnique. Even if u dont want to use it with a emulator the core has a built in account system so the CMS can be independantly ran.<br />\r\n<br />\r\nWe are currently in alpha stages of development and changes are constant.');
+insert  into `news`(`id`,`postdate`,`author`,`title`,`news`) values (1,'01/31/2010','Furt','SwayCMS','SwayCMS is a php content management system designed use with emulators such as : TrinityCore, MaNGOS, ArcEMU, OTserv, and AionUnique. Even if u dont want to use it with a emulator the core has a built in account system so the CMS can be independantly ran.<br />\r\n<br />\r\nWe are currently in alpha stages of development and changes are constant.');
 
 /*Table structure for table `serverlist` */
 
