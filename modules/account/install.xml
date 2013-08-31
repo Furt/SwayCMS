@@ -1,0 +1,8 @@
+<module>
+  <name>
+    Account
+  </name>
+  <link>
+    /account/account.php
+  </link>
+</module>
