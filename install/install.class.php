@@ -2,7 +2,7 @@
 
 /**************************************************
  ** Initial class by Robert Lambert for UnityCMS
- ** Code overhaul by Darko for SwayCMS
+ ** Code overhaul by furt for SwayCMS
  ** no sense in reinventing the wheel ^^
  **************************************************/
 session_start();
@@ -230,14 +230,10 @@ class Install {
 	  	echo '<table><form method=\'post\' action=\'?step=5\'>';
 
 	  	self::inputCreate( 'Site Name', 'text', 'sitename' );
-	  	self::optionCreate('News Plugin', 'news_plugin', $news = array('default', 'smf - not installed'));
+	  	self::optionCreate('News Plugin', 'news_plugin', $news = array('default'));
 	  	self::inputCreate( 'News Posts', 'text', 'news_post' );
-	  	$themes = array('default', 'sway');
-	  	echo "<tr><td>Theme</td><td><select name=\'theme\'>";
-	  	echo "<option value=\'default\'>default</option>";
-	  	echo "<option value=\'blah\'>blah</option>";
-	  	echo "</select></td></tr>";
-	  	self::optionCreate('Language', 'language', $lang = array('english', 'blah'));
+	  	self::optionCreate('Theme', "theme", $themes = array('default', 'sway'));
+	  	self::optionCreate('Language', 'language', $lang = array('english'));
 	  	self::inputCreate( 'Forum Link', 'text', 'forum_link' );
 
 	  	echo '</table><input type=\'submit\' name=\'submit\' value=\'Continue\'></form><br>';
