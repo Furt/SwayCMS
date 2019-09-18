@@ -6,7 +6,7 @@ class usersOnline {
 	var $timeout = 600;
 	var $count = 0;
 
-	function usersOnline () {
+	function online () {
 		$this->timestamp = time();
 		$this->ip = $this->ipCheck();
 		$this->new_user();
@@ -39,19 +39,19 @@ class usersOnline {
 	function new_user() {
 		$sql = new sql;
 		$sql->wconnect();
-		$insert = mysql_query ("INSERT INTO user_online(timestamp, ip) VALUES ('$this->timestamp', '$this->ip')");
+		$insert = mysqli_query ($m, "INSERT INTO user_online(timestamp, ip) VALUES ('$this->timestamp', '$this->ip')");
 	}
 
 	function delete_user() {
 		$sql = new sql;
-		$sql->wconnect();
-		$delete = mysql_query ("DELETE FROM user_online WHERE timestamp < ($this->timestamp - $this->timeout)");
+		$m = $sql->wconnect();
+		$delete = mysqli_query ($m, "DELETE FROM user_online WHERE timestamp < ($this->timestamp - $this->timeout)");
 	}
 
 	function count_users() {
 		$sql = new sql;
-		$sql->wconnect();
-		$count = mysql_num_rows ( mysql_query("SELECT DISTINCT ip FROM user_online"));
+		$m = $sql->wconnect();
+		$count = mysqli_num_rows ( mysqli_query($m, "SELECT DISTINCT ip FROM user_online"));
 		return $count;
 	}
 

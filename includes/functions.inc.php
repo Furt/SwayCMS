@@ -22,16 +22,16 @@ function folderlist($startdir){
 
 function motd() {
 	$sql = new sql();
-	$sql->wconnect();
 	$motdQuery = "SELECT * FROM motd ORDER BY id DESC LIMIT 1";
-	$motdResult = mysql_query($motdQuery);
+	$motdResult = $sql->squery($sql->wconnect(),$motdQuery);
+	$motd = null;
 
 	if (!$motdResult) {
-		$message  = mysql_error();
+		$message  = mysqli_connect_error();
 		error_reporting('E_NONE');
 		echo $message;
 	}
-	while ($motdRow = mysql_fetch_assoc($motdResult)) {
+	while ($motdRow = mysqli_fetch_assoc($motdResult)) {
 		$motd = $motdRow['text'];
 	}
 	return $motd;
@@ -40,11 +40,10 @@ function motd() {
 function getads() {
 	$adsfile = txtopen("templates/".TEMPLATE_NAME."/theme/ads.tpl");
 	$sql = new sql();
-	$sql->wconnect();
 	$adq = "SELECT image, url FROM ads";
-	$adres = mysql_query ($adq);
+	$adres = $sql->squery($sql->wconnect(),$adq);
 	$link = "";
-	while ($adrow = mysql_fetch_assoc($adres)) {
+	while ($adrow = mysqli_fetch_assoc($adres)) {
 		$adimg = $adrow['image'];
 		$adlink =  $adrow['url'];
 		$replaceurl = str_replace("{link}", $adlink, $adsfile);

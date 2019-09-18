@@ -26,20 +26,20 @@ class plugin {
 
 		//mysql connect
 		$sql = new sql;
-		$sql->wconnect();
-
+		$m = $sql->wconnect();
+		
 		//Check for correct account and pass info.
 		$query = "SELECT `password` FROM users WHERE `account` = '". $user ."'";
-		$result = mysql_query($query);
+		$result = mysqli_query($m, $query);
 		if($result == $opass) {
 			//Encrypt new pass
 			$npass = $this->securePass($newpass);
 				
 			//Add new pass to account db.
 			$queryp = "REPLACE INTO users (password) VALUES ($npass) WHERE `account` = '". $user ."'";
-			mysql_query($queryp);
+			mysqli_query($m, $queryp);
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 
 	public function recoverPass($user, $email) {
@@ -52,22 +52,22 @@ class plugin {
 
 		//mysql connect.
 		$sql = new sql;
-		$sql->wconnect();
+		$m = $sql->wconnect();
 
 		//check and see if account name is used.
 		$check = "SELECT `id` FROM users WHERE `account` = '{$user}'";
-		$rcheck = mysql_query($check);
-		if(mysql_num_rows($rcheck) > 0) {
+		$rcheck = mysqli_query($m, $check);
+		if(mysqli_num_rows($rcheck) > 0) {
 			$this->send_error[] = 'This user already exists';
 		}
 
-		include_once './includes/secure/securimage.php';
+		include_once './includes/securimage/securimage.php';
 		$securimage = new Securimage();
 		if ($securimage->check($cap) == false) {
 			$this->send_error[] = 'The Captcha code was incorrect.';
 		}
 		if (empty($this->send_error)) {
-			$query = mysql_query("INSERT INTO users (account,password,email) VALUES ('{$user}','{$password}','{$email}')");
+			$query = mysqli_query($m, "INSERT INTO users (account,password,email) VALUES ('{$user}','{$password}','{$email}')");
 			if(!$query) {
 				$this->send_error[] = 'Insert query error.';
 			}else{
@@ -75,7 +75,7 @@ class plugin {
 				$this->head = true;
 			}
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 
 	public function login($user,$pass) {
@@ -84,19 +84,19 @@ class plugin {
 
 		//mysql connect.
 		$sql = new sql;
-		$sql->wconnect();
+		$m = $sql->wconnect();
 
 		//checks to see if account name is in database.
-		$ucheck = sprintf("SELECT `id` FROM users WHERE `account` = '%s'", addcslashes(mysql_real_escape_string($user),'%_'));
-		$rucheck = mysql_query($ucheck);
-		if(mysql_num_rows($rucheck) != 1) {
+		$ucheck = sprintf("SELECT `id` FROM users WHERE `account` = '%s'", addcslashes(mysqli_real_escape_string($m, $user),'%_'));
+		$rucheck = mysqli_query($m, $ucheck);
+		if(mysqli_num_rows($rucheck) != 1) {
 			$this->send_error[] = 'Incorrect username.';
 		}
 
 		// checks to see if pass is correct
-		$pcheck = sprintf("SELECT * FROM users WHERE `account` = '%s'", addcslashes(mysql_real_escape_string($user),'%_'));
-		$prcheck = mysql_query($pcheck);
-		while ($user_row = mysql_fetch_assoc($prcheck)) {
+		$pcheck = sprintf("SELECT * FROM users WHERE `account` = '%s'", addcslashes(mysqli_real_escape_string($m, $user),'%_'));
+		$prcheck = mysqli_query($m, $pcheck);
+		while ($user_row = mysqli_fetch_assoc($prcheck)) {
 			if ($password != $user_row['password']) {
 				$this->send_error[] = 'Incorrect password.';
 			}
@@ -104,12 +104,12 @@ class plugin {
 
 		if (empty($this->send_error)) {
 			//gets the session data needed
-			$query = mysql_query("SELECT id,account,admin,email FROM `users` WHERE account = '". $user ."'");
+			$query = mysqli_query($m, "SELECT id,account,admin,email FROM `users` WHERE account = '". $user ."'");
 			if(!$query) {
 				$this->send_error[] = 'Session save error.';
 			}else{
 				//save session data in a array
-				$_SESSION['user'] = mysql_fetch_row($query);
+				$_SESSION['user'] = mysqli_fetch_row($query);
 
 				// since theres 4 columns saved from query and first column starts as 0  the next ones will start as 4
 				$_SESSION['user'][4] = "true";
@@ -117,7 +117,7 @@ class plugin {
 
 				// check if admin and set sessions
 				if($_SESSION['user'][2] == '1') {
-					$_SESSION['admin'] = mysql_fetch_row($query);
+					$_SESSION['admin'] = mysqli_fetch_row($query);
 					$_SESSION['admin'][4] = 'true';
 				}
 
@@ -126,7 +126,7 @@ class plugin {
 				$this->head = true;
 			}
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 }
 ?>

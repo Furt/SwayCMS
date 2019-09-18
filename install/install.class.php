@@ -69,7 +69,7 @@ class Install {
 	static function executeSqlFile($sql) {
 		$query = explode( ";\r", $sql );
 		for( $i=0; $i<count($query);$i++) {
-			if( !mysql_query( $query[$i] ) ) {
+			if( !mysqli_query( $query[$i] ) ) {
 				return true;
 			}
 		}
@@ -109,18 +109,18 @@ class Install {
 				$site_pass = $_POST['site_pass'];
 				$site_db   = $_POST['site_db'];
 
-				$con       = @mysql_connect( $site_host, $site_user, $site_pass );
+				$con       = @mysqli_connect( $site_host, $site_user, $site_pass );
 
-				if ( mysql_error() ) {
+				if ( mysqli_connect_error() ) {
 					self::showMessage( "Could not open a connection to the mysql service<br />Please double check the information you provided..", "red" );
 					self::redirect( "index.php?step=$step", 2 );
 					return;
 				}
 
-				$db = @mysql_select_db( $site_db, $con );
+				$db = @mysqli_select_db( $site_db, $con );
 
-				if ( mysql_error() ) {
-					mysql_close( $con );
+				if ( mysqli_connect_error() ) {
+					mysqli_close( $con );
 					self::showMessage( "Could not open a connection to the database<br />Please double check the information you provided..", "red" );
 					self::redirect( "index.php?step=$step", 2 );
 					return;
@@ -134,7 +134,7 @@ class Install {
 					return;
 				}
 				else {
-					mysql_close( $con );
+					mysqli_close( $con );
 					self::showMessage( "<br />Failed to create necessary tables.. mysql returned the following: " . mysql_error(), "red" );
 					return;
 				}

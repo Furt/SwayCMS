@@ -2,9 +2,9 @@
 if(!defined('SCMS')) die("Hacking attempt!");
 
 $sql = new sql();
-$sql->wconnect();
+$m = $sql->wconnect();
 $query = "SELECT id, name, page FROM menu";
-$result = mysql_query($query);
+$result = mysqli_query($m, $query);
 
 if (!$result) {
 	$message  = mysql_error();
@@ -13,7 +13,7 @@ if (!$result) {
 }
 $lnks = '<ul>';
 
-while ($row = mysql_fetch_assoc($result)) {
+while ($row = mysqli_fetch_assoc($result)) {
 	$lnks .= "<li><a href='index.php".$row['page']."'>".$row['name']."</a></li>";
 }
 $lnks .= "</ul>";

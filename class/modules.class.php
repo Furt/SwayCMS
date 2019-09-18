@@ -23,14 +23,14 @@ class module {
 
 	function run($align) {
 		$sql = new sql;
-		$sql->wconnect();
-		$mods = "SELECT * FROM module ORDER BY m_position ASC";
-		$mods = mysql_query ($mods);
-		echo mysql_error();
+		$m = $sql->wconnect();
+		$mod = "SELECT * FROM module ORDER BY m_position ASC";
+		$mods = mysqli_query ($m, $mod);
+		//echo mysql_error();
 		$run = '<br />';
-		echo $br;
+		//echo $br;
 
-		while ($row = mysql_fetch_array($mods)) {
+		while ($row = mysqli_fetch_array($mods)) {
 			// selects modules for the needed position.
 			if($row['m_alignment'] == $align) {
 				// making sure there enabled.
@@ -39,7 +39,7 @@ class module {
 				}
 			}
 		}
-		$sql->close();
+		$sql->close($m);
 		return $run;
 	}
 }

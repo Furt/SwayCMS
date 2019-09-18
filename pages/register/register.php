@@ -33,7 +33,7 @@ if($_SESSION['user'][4] == "true") {
 					<td><input type='text' name='remail' value='' /></td>
 				</tr>
 				<tr>
-					<td><img id="captcha" src="./includes/secure/securimage_show.php"
+					<td><img id="captcha" src="./includes/securimage/securimage_show.php"
 						alt="CAPTCHA Image" width="130" /></td>
 					<td><input type="text" name="captcha_code" /></td>
 				</tr>

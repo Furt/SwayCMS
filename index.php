@@ -8,7 +8,7 @@ session_start();
 define('SCMS',1);
 
 // check to see if the cms is installed
-if(!file_exists('includes/config.inc.php')){
+if(!file_exists('./includes/config.inc.php')){
 	header( "Location: ./install/index.php" );
 }
 
@@ -24,8 +24,8 @@ ini_set('error_log','error_log.txt');
 error_reporting(E_ALL);
 
 // init
-require_once('includes/config.inc.php');
-require_once('includes/base.inc.php');
+require_once('./includes/config.inc.php');
+require_once('./includes/base.inc.php');
 
 // start template
 global $tmpl;

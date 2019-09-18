@@ -10,11 +10,11 @@ class news {
 		$temp = new tmpl;
 		$sql = new sql;
 
-		$sql->wconnect();
+		$m = $sql->wconnect();
 		$query = 'SELECT id, author, title, news, postdate FROM news ORDER BY id DESC LIMIT '.$site['news_post'];
-		$result = mysql_query ($query);
-		echo mysql_error();
-		while ($row = mysql_fetch_assoc($result)) {
+		$result = mysqli_query ($m, $query);
+		echo mysqli_error($m);
+		while ($row = mysqli_fetch_assoc($result)) {
 			$author 	= strip_tags( $row['author']);
 			$date 		= $row['postdate'];
 			$title		= strip_tags( $row['title']);
@@ -30,7 +30,7 @@ class news {
 
 			echo $temp->pharsecentertpl($newsparse);
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 }
 ?>

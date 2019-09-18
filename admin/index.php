@@ -2,7 +2,7 @@
  /******************************************************************************
   * Copyright (C) 2010 SwayCMS <http://swaycms.com/>
   * Admin Panel
-  * Developed by: Darko (darko@swaycms.com)
+  * Developed by: Furt (furt1337@live.com)
   ******************************************************************************/
 session_start();
 define('SCMS',1);

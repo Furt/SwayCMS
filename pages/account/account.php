@@ -5,7 +5,7 @@ global $plugin;
 $plugin = new plugin;
 
 if($_SESSION['user'][4] == "false") {
-	/*	if($_GET['function'] != "login") {
+		if($_GET['function'] != "login") {
 
 	$tmpl = new tmpl;
 	echo $tmpl->pharsecentertpl($tmpl->loginform());
@@ -21,7 +21,7 @@ if($_SESSION['user'][4] == "false") {
 	}
 	}
 	}
-	*/
+	
 }
 
 if($_GET['function'] == "login") {

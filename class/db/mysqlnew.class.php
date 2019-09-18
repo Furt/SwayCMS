@@ -11,12 +11,12 @@ class mysql {
 
 	public function __construct( $hostname, $username, $password, $database, $persistent = false ) {
 		if($persistent == true) {
-			$this->db_link = mysql_pconnect( $hostname, $username, $password ) or die( mysql_error() );
-			return mysql_select_db( $database ) or die ( mysql_error() );
+			$this->db_link = mysqli_pconnect( $hostname, $username, $password ) or die( mysqli_connect_error() );
+			return mysqli_select_db( $database ) or die ( mysqli_connect_error() );
 		}
 		else {
-			$this->db_link = mysql_connect( $hostname, $username, $password ) or die( mysql_error() );
-			return mysql_select_db( $database ) or die ( mysql_error() );
+			$this->db_link = mysqli_connect( $hostname, $username, $password ) or die( mysqli_connect_error() );
+			return mysqli_select_db( $database ) or die ( mysqli_connect_error() );
 		}
 	}
 
@@ -24,7 +24,7 @@ class mysql {
 		global $nquery, $sql_debug;
 		$this->sql_function_level++;
 		$nquery++;
-		if( $this->result = mysql_query( $query ) ) {
+		if( $this->result = mysqli_query( $query ) ) {
 			$this->sql_function_level = 0;
 			return $this->result;
 		}
@@ -38,7 +38,7 @@ class mysql {
 	public function query_array( $query ) {
 		$this->sql_function_level++;
 		if( $result = $this->query( $query ) ) {
-			$query_array = mysql_fetch_array( $result, MYSQL_ASSOC);
+			$query_array = mysqli_fetch_array( $result );
 
 			return $query_array;
 		}
@@ -48,7 +48,7 @@ class mysql {
 		$this->sql_function_level++;
 		if( $result = $this->query( $query ) ) {
 			$query_list = array( );
-			while( $row = mysql_fetch_array( $result, MYSQL_ASSOC ) )
+			while( $row = mysqli_fetch_array( $result ) )
 			$query_list[ ] = $row;
 
 			return $query_list;
@@ -57,7 +57,7 @@ class mysql {
 
 	public function query_count( $query ) {
 		$this->sql_function_level++;
-		return mysql_num_rows( mysql_query( $query ) );
+		return mysqli_num_rows( mysqli_query( $query ) );
 	}
 
 	public function nQuery( ) {
@@ -68,7 +68,7 @@ class mysql {
 		$query = explode( ";\r", $sql );
 		$html = '';
 		for( $i=0; $i<count($query);$i++) {
-			if( !mysql_query( $query[$i] ) ) {
+			if( !mysqli_query( $query[$i] ) ) {
 				$html .= ' - <font color="red">ERROR</font>';
 			}
 			else
@@ -79,22 +79,22 @@ class mysql {
 	}
 
 	public function affectedRows() {
-		return mysql_affected_rows();
+		return mysqli_affected_rows();
 	}
 
 	public function disconnect( ) {
-		return mysql_close( $this->db_link );
+		return mysqli_close( $this->db_link );
 	}
 
 	public function sql_escape($msg) {
 		if(get_magic_quotes_gpc())
 		return $msg;
 		else
-		return @mysql_real_escape_string($msg);
+		return @mysqli_real_escape_string($msg);
 	}
 
 	private function trace_error( $query ) {
-		$sql_error = mysql_error();
+		$sql_error = mysqli_error();
 		$debug_array = debug_backtrace();
 
 		$error_html = "\n" .
