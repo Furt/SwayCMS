@@ -1,4 +1,4 @@
 SwayCMS
 =======
 
-A gaming cms I started 2 years ago but never made public
+A gaming cms I started in 2010 but never made public.
