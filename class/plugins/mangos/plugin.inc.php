@@ -26,20 +26,20 @@ class plugin {
 
 		//mysql connect
 		$sql = new sql();
-		$sql->aconnect();
+		$m = $sql->aconnect();
 
 		//Check for correct account and pass info.
 		$query = "SELECT `sha_pass_hash` FROM account WHERE username= '$user'";
-		$result = mysql_query($query);
+		$result = mysqli_query($m, $query);
 		if($result == $opass) {
 			//Encrypt new pass
 			$npass = $this->securePass($account, $npass);
 
 			//Add new pass to account db.
 			$queryp = "REPLACE INTO account (sha_pass_hash) VALUES ($npass) WHERE username= '$user'";
-			mysql_query($queryp);
+			mysqli_query($m, $queryp);
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 
 	public function register($user, $pass, $email, $cap) {
@@ -50,12 +50,12 @@ class plugin {
 
 		//mysql connect.
 		$sql = new sql;
-		$sql->aconnect();
+		$m = $sql->aconnect();
 
 		//check and see if account name is used.
-		$checka = "SELECT `id` FROM account WHERE username= '$user'";
-		$checka1 = mysql_query($checka);
-		if(mysql_num_rows($checka1) > 0) {
+		$check = "SELECT `id` FROM account WHERE username= '$user'";
+		$rcheck = mysqli_query($m, $check);
+		if(mysqli_num_rows($rcheck) > 0) {
 			$this->send_error[] = 'This user is already exist';
 		}
 			
@@ -65,7 +65,7 @@ class plugin {
 			$this->send_error[] = 'The Captcha code was incorrect.';
 		}
 		if (empty($this->send_error)) {
-			$query = mysqli_query("INSERT INTO account (username,sha_pass_hash,email,expansion) VALUES ('$username','$password','$email','2')");
+			$query = mysqli_query($m, "INSERT INTO account (username,sha_pass_hash,email,expansion) VALUES ('$username','$password','$email','2')");
 			if(!$query) {
 				$this->send_error[] = 'Insert query error.';
 			}else{
@@ -73,7 +73,7 @@ class plugin {
 				$this->head = true;
 			}
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 
 	public function login($user, $pass) {
@@ -82,31 +82,31 @@ class plugin {
 
 		//mysql connect.
 		$sql = new sql;
-		$sql->aconnect();
+		$m = $sql->aconnect();
 
 		//checks to see if account name is in database.
-		$ucheck = sprintf("SELECT id FROM `account` WHERE username='%s'", addcslashes(mysql_real_escape_string($user),'%_'));
-		$rucheck = mysqli_query($ucheck);
-		if(mysql_num_rows($rucheck) != 1) {
+		$ucheck = sprintf("SELECT id FROM `account` WHERE username='%s'", addcslashes(mysqli_real_escape_string($m, $user),'%_'));
+		$rucheck = mysqli_query($m, $ucheck);
+		if(mysqli_num_rows($rucheck) != 1) {
 			$this->send_error[] = 'Incorrect username.';
 		}
 			
 		// checks to see if pass is correct
-		$pcheck = sprintf("SELECT sha_pass_hash FROM `account` WHERE username='%s'", addcslashes(mysql_real_escape_string($password),'%_'));
-		$prcheck = mysqli_query($pcheck);
-		while ($user_row = mysql_fetch_assoc($prcheck)) {
+		$pcheck = sprintf("SELECT sha_pass_hash FROM `account` WHERE username='%s'", addcslashes(mysqli_real_escape_string($m, $password),'%_'));
+		$prcheck = mysqli_query($m, $pcheck);
+		while ($user_row = mysqli_fetch_assoc($prcheck)) {
 			if ($password != $user_row['password']) {
 				$this->send_error[] = 'Incorrect password.';
 			}
 		}
 		if (empty($this->send_error)) {
 			//gets the session data needed
-			$query = mysqli_query("SELECT id,username,gmlevel,email FROM `account` WHERE username = '". $user ."'");
+			$query = mysqli_query($m, "SELECT id,username,gmlevel,email FROM `account` WHERE username = '". $user ."'");
 			if(!$query) {
 				$this->send_error[] = 'Session save error.';
 			}else{
 				//save session data in a array
-				$_SESSION['user'] = mysql_fetch_row($query);
+				$_SESSION['user'] = mysqli_fetch_row($query);
 
 				// since theres 4 columns saved from query and first column starts as 0  the next ones will start as 4
 				$_SESSION['user'][4] = "true";
@@ -114,7 +114,7 @@ class plugin {
 
 				// check if admin and set sessions
 				if($_SESSION['user'][2] == '3') {
-					$_SESSION['admin'] = mysql_fetch_row($query);
+					$_SESSION['admin'] = mysqli_fetch_row($query);
 					$_SESSION['admin'][4] = 'true';
 				}
 
@@ -123,43 +123,49 @@ class plugin {
 				$this->head = true;
 			}
 		}
-		$sql->close();
+		$sql->close($m);
 	}
 }
 
 function getRace($id) {
+	//mysql connect
 	$sql = new sql();
-	$sql->wconnect();
+	$m = $sql->wconnect();
+	
+	//gets the race id's
 	$raceQuery = "SELECT * FROM race WHERE raceid = '$id' LIMIT 1";
-	$raceResult = mysqli_query($raceQuery);
+	$raceResult = mysqli_query($m, $raceQuery);
 	if (!$raceResult) {
-		$message  = mysql_error();
+		$message  = mysqli_error();
 		error_reporting('E_NONE');
 		echo $message;
 	}
-	while ($raceRow = mysql_fetch_assoc($raceResult)) {
+	while ($raceRow = mysqli_fetch_assoc($raceResult)) {
 		$name = $raceRow['name'];
 	}
 
+	$sql->close($m);
 	return $name;
 }
 
 
 function getRaceFaction($id) {
-
+	//mysql connect
 	$sql = new sql();
-	$sql->wconnect();
+	$m = $sql->wconnect();
+	
 	$raceQuery = "SELECT * FROM race WHERE raceid = '$id' LIMIT 1";
-	$raceResult = mysqli_query($raceQuery);
+	$raceResult = mysqli_query($m, $raceQuery);
 
 	if (!$raceResult) {
 		trigger_error("Race id wrong.");
 	}
 
-	while ($raceRow = mysql_fetch_assoc($raceResult)) {
+	while ($raceRow = mysqli_fetch_assoc($raceResult)) {
 		$faction = $raceRow['faction'];
 	}
-
+	
+	$sql->close($m);
 	return $faction;
 }
 
@@ -182,20 +188,24 @@ function pharsegold($type, $gold) {
 	return $returngold;
 }
 
-function realmlist($id,$name, $ip, $port, $mysql, $sqlun, $sqlpass, $chardb, $maxplr) {
-	connectremotes($mysql, $sqlun, $sqlpass, $chardb);
-	$queryup = "SELECT  count(online) AS result_count FROM characters WHERE online = '1' LIMIT 1";
-	$result2 = mysql_fetch_assoc(mysql_query($queryup));
+//TODO not complete
+function realmlist() {
+	//mysql connect.
+	$sql = new sql;
+	$m = $sql->cconnect();
+	
+	$query = "SELECT  count(online) AS result_count FROM characters WHERE online = '1' LIMIT 1";
+	$result = mysql_fetch_assoc(mysql_query($m, $query));
 
-	$countnum = $result2['result_count'];
+	$countnum = $result['result_count'];
 	if($countnum <= "09") {
-		$cntfin = str_replace("0", "", $result2['result_count']);
+		$cntfin = str_replace("0", "", $result['result_count']);
 	} else if($countnum == "00") {
 		$cntfin = "0";
 	} else if(empty($countnum)) {
 		$cntfin = "0";
 	} else {
-		$cntfin = $result2['result_count'];
+		$cntfin = $result['result_count'];
 	}
 	$total = floor(($maxplr - $cntfin)/10);
 
