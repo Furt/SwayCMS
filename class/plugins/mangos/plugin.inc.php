@@ -65,7 +65,7 @@ class plugin {
 			$this->send_error[] = 'The Captcha code was incorrect.';
 		}
 		if (empty($this->send_error)) {
-			$query = mysql_query("INSERT INTO account (username,sha_pass_hash,email,expansion) VALUES ('$username','$password','$email','2')");
+			$query = mysqli_query("INSERT INTO account (username,sha_pass_hash,email,expansion) VALUES ('$username','$password','$email','2')");
 			if(!$query) {
 				$this->send_error[] = 'Insert query error.';
 			}else{
@@ -86,14 +86,14 @@ class plugin {
 
 		//checks to see if account name is in database.
 		$ucheck = sprintf("SELECT id FROM `account` WHERE username='%s'", addcslashes(mysql_real_escape_string($user),'%_'));
-		$rucheck = mysql_query($ucheck);
+		$rucheck = mysqli_query($ucheck);
 		if(mysql_num_rows($rucheck) != 1) {
 			$this->send_error[] = 'Incorrect username.';
 		}
 			
 		// checks to see if pass is correct
 		$pcheck = sprintf("SELECT sha_pass_hash FROM `account` WHERE username='%s'", addcslashes(mysql_real_escape_string($password),'%_'));
-		$prcheck = mysql_query($pcheck);
+		$prcheck = mysqli_query($pcheck);
 		while ($user_row = mysql_fetch_assoc($prcheck)) {
 			if ($password != $user_row['password']) {
 				$this->send_error[] = 'Incorrect password.';
@@ -101,7 +101,7 @@ class plugin {
 		}
 		if (empty($this->send_error)) {
 			//gets the session data needed
-			$query = mysql_query("SELECT id,username,gmlevel,email FROM `account` WHERE username = '". $user ."'");
+			$query = mysqli_query("SELECT id,username,gmlevel,email FROM `account` WHERE username = '". $user ."'");
 			if(!$query) {
 				$this->send_error[] = 'Session save error.';
 			}else{
@@ -119,7 +119,7 @@ class plugin {
 				}
 
 				// report good login
-				$this->send_error[] = 'Your are now logged in.';
+				$this->send_error[] = 'You are now logged in.';
 				$this->head = true;
 			}
 		}
@@ -131,7 +131,7 @@ function getRace($id) {
 	$sql = new sql();
 	$sql->wconnect();
 	$raceQuery = "SELECT * FROM race WHERE raceid = '$id' LIMIT 1";
-	$raceResult = mysql_query($raceQuery);
+	$raceResult = mysqli_query($raceQuery);
 	if (!$raceResult) {
 		$message  = mysql_error();
 		error_reporting('E_NONE');
@@ -150,7 +150,7 @@ function getRaceFaction($id) {
 	$sql = new sql();
 	$sql->wconnect();
 	$raceQuery = "SELECT * FROM race WHERE raceid = '$id' LIMIT 1";
-	$raceResult = mysql_query($raceQuery);
+	$raceResult = mysqli_query($raceQuery);
 
 	if (!$raceResult) {
 		trigger_error("Race id wrong.");

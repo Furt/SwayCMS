@@ -1,4 +1,6 @@
 <?php
+if(!defined('SCMS')) die('Hacking attempt!');
+
 class BaseIntEncoder {
 
 	//const $codeset = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
