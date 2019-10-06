@@ -50,19 +50,19 @@ class Install {
 		header( 'Location: ' . $url );
 
 		echo "
-        <script type=\"text/javascript\">
-            setTimeout('location = \'" . $url . "\'', ($timer * 1000));
-        </script>
-        <noscript><meta http-equiv=\"refresh\" content=\"$timer;url=" . $url . "\" /></noscript>";
-
-		echo "<br /><br />Now redirecting you<br />";
-		echo "<a href='$url'>Click here if you do not wish to wait</a>";
+				<script type=\"text/javascript\">
+					setTimeout('location = \'" . $url . "\'', ($timer * 1000));
+				</script>
+				<noscript>
+					<meta http-equiv=\"refresh\" content=\"$timer;url=" . $url . "\" />
+				</noscript>
+				<br /><br />Now redirecting you<br />
+				<a href='$url'>Click here if you do not wish to wait</a>
+			 ";
 	}
 	static function Secure( $s ) {
 		$s = htmlentities( strip_tags( $s ) );
-
 		if ( ini_get( 'magic_quotes_gpc' ) ) { $s = stripslashes( $s ); }
-
 		return $s;
 	}
 
@@ -79,7 +79,8 @@ class Install {
 	static function BuildStep( $step ) {
 		$error = false;
 		$next  = $step + 1;
-
+		
+		//Step 0
 		if ( $step == 0 ) {
 			self::showMessage( "SwayCMS Installation<br />", "blue" );
 			self::showMessage( "This installer will check writable files, create config, and import the cms database.", "black" );
@@ -87,18 +88,18 @@ class Install {
 
 		//Step 1
 		if ( $step == 1 ) {
-	  if(file_exists("../includes/config.inc.php")) {
-	  	if ( !is_writable( "../includes/config.inc.php" ) ) {
-	  		if ( !@chmod( "../includes/config.inc.php", 0777 ) ) {
-	  			self::showMessage( "We need to be able to write to the file `config.php` which is located in the directory, please chmod the file to 0777.", "red" );
-	  			return;
-	  		}
-	  	}
-	  }
+			if(file_exists("../includes/config.inc.php")) {
+				if ( !is_writable( "../includes/config.inc.php" ) ) {
+					if ( !@chmod( "../includes/config.inc.php", 0777 ) ) {
+						self::showMessage( "We need to be able to write to the file `config.php` which is located in the directory, please chmod the file to 0777.", "red" );
+						return;
+					}
+				}
+			}
 
-	  self::showMessage( "File checks have been completed, we will now proceed to the next step", "green" );
-	  self::redirect( "index.php?step=$next", 2 );
-	  return;
+			self::showMessage( "File checks have been completed, we will now proceed to the next step", "green" );
+			self::redirect( "index.php?step=$next", 2 );
+			return;
 		}
 
 		//Step 2
@@ -174,7 +175,7 @@ class Install {
 			return;
 		}
 
-		//Step 4
+		//Step 4 needs fixed
 		if ( $step == 4 ) {
 			$realmid = 0;
 			 
@@ -184,32 +185,34 @@ class Install {
 				self::redirect( "index.php?step=$next", 2 );
 			} else {
 
-			if ( isset( $_POST ) && isset( $_POST['realmid'] ) ) {
-				$realmid = $_POST['realmid'];
-				unset( $_SESSION['submit'] );
-				unset( $_SESSION['realmid'] );
+				if ( isset( $_POST ) && isset( $_POST['realmid'] ) ) {
+					$realmid = $_POST['realmid'];
+					unset( $_SESSION['submit'] );
+					unset( $_SESSION['realmid'] );
 
-				foreach ( $_POST as $k => $v ) {
-					$_SESSION[$k . "_" . $realmid] = $v;
-					unset( $_SESSION[$k] );
-				}
+					foreach ( $_POST as $k => $v ) {
+						$_SESSION[$k . "_" . $realmid] = $v;
+						unset( $_SESSION[$k] );
+					}
 
-				$realmid += 1;
-				if ( $realmid >= $_SESSION['totalrealms'] ) {
-					self::redirect( "index.php?step=$next", 0 );
-					return;
+					$realmid += 1;
+					if ( $realmid >= $_SESSION['totalrealms'] ) {
+						self::redirect( "index.php?step=$next", 0 );
+						return;
+					}
 				}
-			}
 
 				echo '<b>Character\'s ' . ( $realmid + 1 ) . ' Database Connection information</b>';
 				echo '<table><form method=\'post\' action=\'?step=4\'>';
 
-				self::inputCreate( 'Realm Name', 'text', 'characters_name' );
-				self::inputCreate( 'Hostname', 'text', 'characters_host' );
-				self::inputCreate( 'Username', 'text', 'characters_user' );
-				self::inputCreate( 'Password', 'password', 'characters_pass' );
-				self::inputCreate( 'Database', 'text', 'characters_db' );
-				self::optionCreate('Database Structure', 'characters_core',  $cores = array('default', 'mangos'));
+				self::inputCreate( 'Realm Name', 'text', 'realm_name' );
+				self::inputCreate( 'Hostname', 'text', 'realm_host' );
+				self::inputCreate( 'Username', 'text', 'realm_user' );
+				self::inputCreate( 'Password', 'password', 'realm_pass' );
+				self::inputCreate( 'Character DB', 'text', 'character_db' );
+				self::inputCreate( 'World DB', 'text', 'world_db' );
+				self::inputCreate( 'Account DB', 'text', 'realm_db' );
+				self::optionCreate('Emulator', 'emu_core',  $cores = array('default', 'mangos'));
 				self::inputCreate( 'Max Player Count', 'text', 'characters_pcount', 0 );
 				self::inputCreate( '', 'hidden', 'realmid', $realmid );
 
@@ -234,19 +237,21 @@ class Install {
 			self::optionCreate('News Plugin', 'news_plugin', $news = array('default'));
 			self::inputCreate( 'News Posts', 'text', 'news_post' );
 			self::optionCreate('Emulator', "emu", $themes = array('default', 'mangos', 'trinitycore'));
-			self::optionCreate('Theme', "theme", $themes = array('default', 'sway'));
+			self::optionCreate('Theme', "theme", $themes = array('sway', 'frozen'));
 			self::optionCreate('Language', 'language', $lang = array('english'));
 			self::inputCreate( 'Forum Link', 'text', 'forum_link' );
 
 			echo '</table><input type=\'submit\' name=\'submit\' value=\'Continue\'></form><br>';
 		}
-
+		
+		//Step 6 needs fixed
 		if ( $step == 6 ) {
 			$confedit = new ConfigEditor();
 			if(file_exists('../includes/config.inc.php')) {
 				$confedit->LoadFromFile('../includes/config.inc.php');
 			}
 			$confedit->SetVar('site', array('name'		=> $_SESSION['sitename'],
+											'mysql'		=> 'mysqli',
 											'template'	=> $_SESSION['theme'],
 											'news'		=> $_SESSION['news_plugin'],
 											'news_post'	=> $_SESSION['news_post'],
